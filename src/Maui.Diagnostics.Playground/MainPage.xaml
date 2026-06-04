@@ -67,6 +67,7 @@
                     Grid.Column="1"
                     Text="Send Sentry test"
                     Command="{Binding SendSentryDiagnosticsCommand}"
+                    IsVisible="{Binding IsSentryEnabled}"
                     VerticalOptions="Center" />
             </Grid>
 

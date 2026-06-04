@@ -1,7 +1,9 @@
 using System.Windows.Input;
 using Maui.Diagnostics.Playground.Diagnostics;
 using Maui.Diagnostics.Playground.Features.Scenarios;
+#if CRASH_VENDOR_SENTRY
 using Sentry;
+#endif
 
 namespace Maui.Diagnostics.Playground.Features.Gallery;
 
@@ -18,7 +20,11 @@ public sealed class GalleryViewModel
             .ToArray();
         Summary = diagnosticsSelfReportService.GetSummary();
         OpenScenarioCommand = new Command<CrashScenarioDescriptor>(OpenScenario);
+#if CRASH_VENDOR_SENTRY
         SendSentryDiagnosticsCommand = new Command(SendSentryDiagnostics);
+#else
+        SendSentryDiagnosticsCommand = new Command(() => { });
+#endif
     }
 
     public IReadOnlyList<CrashScenarioDescriptor> Scenarios { get; }
@@ -28,6 +34,13 @@ public sealed class GalleryViewModel
     public ICommand OpenScenarioCommand { get; }
 
     public ICommand SendSentryDiagnosticsCommand { get; }
+
+    public bool IsSentryEnabled =>
+#if CRASH_VENDOR_SENTRY
+        true;
+#else
+        false;
+#endif
 
     public string ScenarioCountText => $"{Scenarios.Count} scenarios available on {DeviceInfo.Current.Platform}";
 
@@ -44,6 +57,7 @@ public sealed class GalleryViewModel
         });
     }
 
+#if CRASH_VENDOR_SENTRY
     private static async void SendSentryDiagnostics()
     {
         SentrySdk.CaptureMessage("MAUI Diagnostics Playground Sentry verification");
@@ -65,4 +79,5 @@ public sealed class GalleryViewModel
             "Message, logs, and metrics were queued. Configure Sentry:Dsn before expecting them to arrive in Sentry.",
             "OK");
     }
+#endif
 }
