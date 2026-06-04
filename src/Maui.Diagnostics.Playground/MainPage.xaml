@@ -1,0 +1,123 @@
+﻿<ContentPage
+    x:Class="Maui.Diagnostics.Playground.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,28,24,36" Spacing="24">
+            <Border
+                Padding="24"
+                BackgroundColor="#111827"
+                StrokeShape="RoundRectangle 28"
+                StrokeThickness="0">
+                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="14">
+                    <Label
+                        Text="MAUI Diagnostics Playground"
+                        FontAttributes="Bold"
+                        FontSize="34"
+                        TextColor="White"
+                        SemanticProperties.HeadingLevel="Level1" />
+                    <Label
+                        Grid.Row="1"
+                        Text="Crash scenarios for validating .NET 11 mobile CoreCLR diagnostics, native crash reports, and vendor SDK behavior."
+                        FontSize="17"
+                        LineBreakMode="WordWrap"
+                        TextColor="#CBD5E1" />
+                    <FlexLayout
+                        Grid.Row="2"
+                        BindableLayout.ItemsSource="{Binding Summary.Chips}"
+                        Direction="Row"
+                        Wrap="Wrap"
+                        AlignItems="Start"
+                        JustifyContent="Start">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,8,8,0"
+                                    Padding="12,7"
+                                    BackgroundColor="#1E293B"
+                                    Stroke="#334155"
+                                    StrokeShape="RoundRectangle 18">
+                                    <Label
+                                        Text="{Binding .}"
+                                        FontAttributes="Bold"
+                                        FontSize="12"
+                                        TextColor="#E0F2FE" />
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </Grid>
+            </Border>
+
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label
+                        Text="Scenario gallery"
+                        FontAttributes="Bold"
+                        FontSize="24"
+                        TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}" />
+                    <Label
+                        Text="{Binding ScenarioCountText}"
+                        FontSize="14"
+                        TextColor="{AppThemeBinding Light=#475569, Dark=#CBD5E1}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <CollectionView
+                ItemsSource="{Binding Scenarios}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,0,0,14"
+                            Padding="18"
+                            BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#1E293B}"
+                            Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                            StrokeShape="RoundRectangle 22">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenScenarioCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                    <Label
+                                        Text="{Binding Title}"
+                                        FontAttributes="Bold"
+                                        FontSize="19"
+                                        TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}" />
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="10,5"
+                                        BackgroundColor="{AppThemeBinding Light=#E0F2FE, Dark=#0F172A}"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 14">
+                                        <Label
+                                            Text="{Binding CategoryLabel}"
+                                            FontAttributes="Bold"
+                                            FontSize="11"
+                                            TextColor="{AppThemeBinding Light=#0369A1, Dark=#7DD3FC}" />
+                                    </Border>
+                                </Grid>
+                                <Label
+                                    Grid.Row="1"
+                                    Text="{Binding Description}"
+                                    FontSize="14"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{AppThemeBinding Light=#475569, Dark=#CBD5E1}" />
+                                <Label
+                                    Grid.Row="2"
+                                    Text="{Binding PlatformLabel}"
+                                    FontSize="12"
+                                    TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

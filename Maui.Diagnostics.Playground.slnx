@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Maui.Diagnostics.Playground/Maui.Diagnostics.Playground.csproj" />
+  </Folder>
+</Solution>

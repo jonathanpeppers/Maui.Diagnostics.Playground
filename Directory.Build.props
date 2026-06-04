@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <MauiDiagnosticsUseCoreClr Condition="'$(MauiDiagnosticsUseCoreClr)' == ''">true</MauiDiagnosticsUseCoreClr>
+    <CrashVendor Condition="'$(CrashVendor)' == ''">None</CrashVendor>
+    <CrashReportFrameLimitPerThread Condition="'$(CrashReportFrameLimitPerThread)' == ''">32</CrashReportFrameLimitPerThread>
+    <UseMonoRuntime Condition="'$(MauiDiagnosticsUseCoreClr)' == 'true'">false</UseMonoRuntime>
+    <UseMonoRuntime Condition="'$(MauiDiagnosticsUseCoreClr)' != 'true'">true</UseMonoRuntime>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(CrashVendor)' == 'None'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_NONE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'Sentry'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_SENTRY</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'Raygun'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_RAYGUN</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'NewRelic'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_NEWRELIC</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'Bugsee'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_BUGSEE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'Firebase'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_FIREBASE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'AppCenterLegacy'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_APPCENTERLEGACY</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(CrashVendor)' == 'NativePrototype'">
+    <DefineConstants>$(DefineConstants);CRASH_VENDOR_NATIVEPROTOTYPE</DefineConstants>
+  </PropertyGroup>
+</Project>

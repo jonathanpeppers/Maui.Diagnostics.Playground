@@ -1,0 +1,24 @@
+<Project>
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'Maui.Diagnostics.Playground'">
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>MauiDiagnosticsUseCoreClr</_Parameter1>
+      <_Parameter2>$(MauiDiagnosticsUseCoreClr)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>UseMonoRuntime</_Parameter1>
+      <_Parameter2>$(UseMonoRuntime)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>CrashVendor</_Parameter1>
+      <_Parameter2>$(CrashVendor)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>CrashReportFrameLimitPerThread</_Parameter1>
+      <_Parameter2>$(CrashReportFrameLimitPerThread)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>RuntimeIdentifier</_Parameter1>
+      <_Parameter2>$(RuntimeIdentifier)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>
