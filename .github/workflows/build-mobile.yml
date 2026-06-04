@@ -1,0 +1,171 @@
+name: Build mobile apps
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "true"
+  PROJECT_PATH: src/Maui.Diagnostics.Playground/Maui.Diagnostics.Playground.csproj
+
+jobs:
+  android:
+    name: Android Release
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Select Android SDK packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          export ANDROID_HOME="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-$HOME/Library/Android/sdk}}"
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$sdkmanager" --licenses >/dev/null
+          "$sdkmanager" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "cmake;3.22.1" \
+            "ndk;28.2.13676358"
+
+      - name: Restore MAUI workloads
+        run: dotnet workload restore "$PROJECT_PATH"
+
+      - name: Restore Android app
+        run: dotnet restore "$PROJECT_PATH" -p:TargetFramework=net11.0-android
+
+      - name: Build Android app
+        run: >
+          dotnet build "$PROJECT_PATH"
+          -c Release
+          -f net11.0-android
+          --no-restore
+          -p:MauiDiagnosticsUseCoreClr=true
+          -p:MauiDiagnosticsUseNativeProjects=true
+          -p:CrashVendor=None
+          -p:ContinuousIntegrationBuild=true
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          if-no-files-found: error
+          path: |
+            src/Maui.Diagnostics.Playground/bin/Release/net11.0-android/**/*.apk
+            src/Maui.Diagnostics.Playground/bin/Release/net11.0-android/**/*.aab
+
+  ios:
+    name: iOS Simulator Release
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Show Xcode version
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
+
+      - name: Restore MAUI workloads
+        run: dotnet workload restore "$PROJECT_PATH"
+
+      - name: Restore iOS app
+        run: dotnet restore "$PROJECT_PATH" -p:TargetFramework=net11.0-ios -r iossimulator-x64
+
+      - name: Build iOS simulator app
+        run: >
+          dotnet build "$PROJECT_PATH"
+          -c Release
+          -f net11.0-ios
+          -r iossimulator-x64
+          --no-restore
+          -p:MauiDiagnosticsUseCoreClr=true
+          -p:MauiDiagnosticsUseNativeProjects=true
+          -p:CrashVendor=None
+          -p:CodesignKey=
+          -p:ContinuousIntegrationBuild=true
+
+      - name: Upload iOS simulator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-release
+          if-no-files-found: error
+          path: src/Maui.Diagnostics.Playground/bin/Release/net11.0-ios/iossimulator-x64/**/*.app
+
+  maccatalyst:
+    name: Mac Catalyst Release
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Show Xcode version
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
+
+      - name: Restore MAUI workloads
+        run: dotnet workload restore "$PROJECT_PATH"
+
+      - name: Restore Mac Catalyst app
+        run: dotnet restore "$PROJECT_PATH" -p:TargetFramework=net11.0-maccatalyst -r maccatalyst-x64
+
+      - name: Build Mac Catalyst app
+        run: >
+          dotnet build "$PROJECT_PATH"
+          -c Release
+          -f net11.0-maccatalyst
+          -r maccatalyst-x64
+          --no-restore
+          -p:MauiDiagnosticsUseCoreClr=true
+          -p:MauiDiagnosticsUseNativeProjects=true
+          -p:CrashVendor=None
+          -p:CodesignKey=
+          -p:CreatePackage=false
+          -p:ContinuousIntegrationBuild=true
+
+      - name: Upload Mac Catalyst artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: maccatalyst-release
+          if-no-files-found: error
+          path: src/Maui.Diagnostics.Playground/bin/Release/net11.0-maccatalyst/maccatalyst-x64/**/*.app
