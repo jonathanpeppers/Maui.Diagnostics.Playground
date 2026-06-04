@@ -10,7 +10,11 @@ public sealed class ManagedCrashScenarioRunner : ICrashScenarioRunner
         "managed-background-unhandled",
         "runtime-failfast",
         "runtime-stack-overflow",
-        "vendor-handled-exception"
+        "native-apple-abort",
+        "native-android-sigsegv",
+        "mixed-managed-native",
+        "vendor-handled-exception",
+        "lifecycle-startup-crash"
     ];
 
     public bool CanRun(CrashScenarioDescriptor scenario)
@@ -24,7 +28,11 @@ public sealed class ManagedCrashScenarioRunner : ICrashScenarioRunner
             "managed-background-unhandled" => ThrowUnhandledOnBackgroundThread(),
             "runtime-failfast" => FailFast(),
             "runtime-stack-overflow" => OverflowStack(),
+            "native-apple-abort" => NativeAbort(),
+            "native-android-sigsegv" => NativeSegmentationFault(),
+            "mixed-managed-native" => MixedManagedNativeCrash(),
             "vendor-handled-exception" => CaptureHandledException(),
+            "lifecycle-startup-crash" => ArmStartupCrash(),
             _ => throw new NotSupportedException($"Scenario '{scenario.Key}' is not wired to a crash runner yet.")
         };
     }
@@ -71,6 +79,33 @@ public sealed class ManagedCrashScenarioRunner : ICrashScenarioRunner
         }
 
         return Task.CompletedTask;
+    }
+
+    private static Task NativeAbort()
+    {
+        NativeCrashInterop.Abort();
+        return Task.CompletedTask;
+    }
+
+    private static Task NativeSegmentationFault()
+    {
+        NativeCrashInterop.RaiseSegmentationFault();
+        return Task.CompletedTask;
+    }
+
+    private static Task MixedManagedNativeCrash()
+    {
+        NativeCrashInterop.CrashThroughManagedNativeBoundary();
+        return Task.CompletedTask;
+    }
+
+    private static async Task ArmStartupCrash()
+    {
+        StartupCrashCoordinator.Arm();
+        await Shell.Current.DisplayAlertAsync(
+            "Startup crash armed",
+            "Force quit and relaunch the app. The next launch will throw before the first Shell page is created, then automatically clear the startup crash flag.",
+            "OK");
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]

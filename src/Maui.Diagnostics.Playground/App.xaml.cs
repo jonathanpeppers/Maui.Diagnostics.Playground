@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Maui.Diagnostics.Playground.Features.Scenarios;
 
 namespace Maui.Diagnostics.Playground;
 
@@ -9,6 +10,7 @@ public partial class App : Application
 	public App(IServiceProvider services)
 	{
 		this.services = services;
+		StartupCrashCoordinator.CrashIfArmed();
 		InitializeComponent();
 	}
 

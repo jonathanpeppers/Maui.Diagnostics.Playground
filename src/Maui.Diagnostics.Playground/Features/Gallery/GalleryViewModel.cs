@@ -11,6 +11,7 @@ public sealed class GalleryViewModel
         IDiagnosticsSelfReportService diagnosticsSelfReportService)
     {
         Scenarios = scenarioCatalog.All
+            .Where(scenario => scenario.SupportsCurrentDevice())
             .OrderBy(scenario => scenario.Category)
             .ThenBy(scenario => scenario.Title)
             .ToArray();
@@ -24,7 +25,7 @@ public sealed class GalleryViewModel
 
     public ICommand OpenScenarioCommand { get; }
 
-    public string ScenarioCountText => $"{Scenarios.Count} scenarios registered from the central catalog";
+    public string ScenarioCountText => $"{Scenarios.Count} scenarios available on {DeviceInfo.Current.Platform}";
 
     private static async void OpenScenario(CrashScenarioDescriptor? scenario)
     {

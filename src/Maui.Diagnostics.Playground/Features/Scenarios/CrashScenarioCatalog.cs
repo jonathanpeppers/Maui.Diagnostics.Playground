@@ -43,7 +43,7 @@ public sealed class CrashScenarioCatalog : ICrashScenarioCatalog
         new(
             "native-apple-abort",
             "Apple native abort",
-            "Calls into the linked Xcode framework and aborts from native code on iOS or Mac Catalyst.",
+            "Calls the platform C runtime abort function on iOS or Mac Catalyst to validate native-origin crash reporting.",
             CrashScenarioCategory.Native,
             CrashScenarioPlatform.Apple,
             typeof(ScenarioDetailPage),
@@ -52,7 +52,7 @@ public sealed class CrashScenarioCatalog : ICrashScenarioCatalog
         new(
             "native-android-sigsegv",
             "Android native SIGSEGV",
-            "Calls into the linked Android native library and triggers a segmentation fault.",
+            "Raises SIGSEGV through Android libc to validate native-origin crash reporting and tombstone output.",
             CrashScenarioCategory.Native,
             CrashScenarioPlatform.Android,
             typeof(ScenarioDetailPage),
@@ -84,16 +84,7 @@ public sealed class CrashScenarioCatalog : ICrashScenarioCatalog
             CrashScenarioPlatform.Mobile,
             typeof(ScenarioDetailPage),
             CommonManagedArtifacts,
-            ["startup", "lifecycle"]),
-        new(
-            "edgehost-app-intent",
-            "App Intent host crash",
-            "Future Apple extension-host scenario for validating crash reporting outside the main MAUI app process.",
-            CrashScenarioCategory.EdgeHost,
-            CrashScenarioPlatform.Apple,
-            typeof(ScenarioDetailPage),
-            ["Separate process crash log", "Extension host runtime details", "Vendor extension support notes"],
-            ["edge-host", "app-intents", "future"])
+            ["startup", "lifecycle"])
     ];
 
     public IReadOnlyList<CrashScenarioDescriptor> All => scenarios;
