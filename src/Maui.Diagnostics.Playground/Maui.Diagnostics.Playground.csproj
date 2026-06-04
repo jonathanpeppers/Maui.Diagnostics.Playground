@@ -60,6 +60,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="appsettings.json" />
+		<EmbeddedResource Include="appsettings.local.json" Condition="Exists('appsettings.local.json')" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -67,7 +68,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
 		<PackageReference Include="Microsoft.Maui.Controls" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-		<PackageReference Include="Sentry.Maui" />
+		<PackageReference Include="Sentry.Maui" Condition="'$(CrashVendor)' == 'Sentry'" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(MauiDiagnosticsUseNativeProjects)' == 'true' and ($([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst')">
