@@ -5,6 +5,7 @@ namespace Maui.Diagnostics.Playground.Features.Scenarios;
 
 internal static partial class NativeCrashInterop
 {
+    private const int SigIll = 4;
     private const int SigSegv = 11;
 
     public static void Abort()
@@ -15,6 +16,22 @@ internal static partial class NativeCrashInterop
     public static void RaiseSegmentationFault()
     {
         RaiseNative(SigSegv);
+    }
+
+    public static void RaiseIllegalInstruction()
+    {
+        RaiseNative(SigIll);
+    }
+
+    public static void CrashOnBackgroundThread()
+    {
+        var thread = new Thread(RaiseSegmentationFault)
+        {
+            IsBackground = true,
+            Name = "CrashGallery.NativeBackground"
+        };
+
+        thread.Start();
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]

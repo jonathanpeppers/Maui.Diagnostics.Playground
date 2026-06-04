@@ -18,4 +18,12 @@ public partial class App : Application
 	{
 		return new Window(services.GetRequiredService<AppShell>());
 	}
+
+#pragma warning disable CS0672
+	protected override void OnResume()
+#pragma warning restore CS0672
+	{
+		base.OnResume();
+		StartupCrashCoordinator.CrashOnResumeIfArmed();
+	}
 }

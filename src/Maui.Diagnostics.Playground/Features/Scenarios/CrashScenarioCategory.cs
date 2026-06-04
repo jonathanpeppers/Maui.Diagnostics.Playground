@@ -7,5 +7,6 @@ public enum CrashScenarioCategory
     Native,
     Vendor,
     Lifecycle,
+    Resource,
     EdgeHost
 }
