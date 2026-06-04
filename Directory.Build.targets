@@ -1,0 +1,29 @@
+<Project>
+  <Target Name="GenerateMauiDiagnosticsBuildInfo" BeforeTargets="CoreCompile" Condition="'$(MSBuildProjectName)' == 'Maui.Diagnostics.Playground'">
+    <ItemGroup>
+      <_MauiDiagnosticsBuildInfo Include="// &lt;auto-generated /&gt;" />
+      <_MauiDiagnosticsBuildInfo Include="namespace Maui.Diagnostics.Playground.Diagnostics" />
+      <_MauiDiagnosticsBuildInfo Include="{" />
+      <_MauiDiagnosticsBuildInfo Include="internal static class GeneratedBuildInfo" />
+      <_MauiDiagnosticsBuildInfo Include="{" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string TargetFramework = &quot;$(TargetFramework)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string RuntimeIdentifier = &quot;$(RuntimeIdentifier)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string Configuration = &quot;$(Configuration)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string CrashVendor = &quot;$(CrashVendor)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string MauiDiagnosticsUseCoreClr = &quot;$(MauiDiagnosticsUseCoreClr)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string UseMonoRuntime = &quot;$(UseMonoRuntime)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="    public const string CrashReportFrameLimitPerThread = &quot;$(CrashReportFrameLimitPerThread)&quot;%3B" />
+      <_MauiDiagnosticsBuildInfo Include="}" />
+      <_MauiDiagnosticsBuildInfo Include="}" />
+    </ItemGroup>
+
+    <WriteLinesToFile
+      File="$(IntermediateOutputPath)MauiDiagnosticsBuildInfo.g.cs"
+      Lines="@(_MauiDiagnosticsBuildInfo)"
+      Overwrite="true" />
+
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)MauiDiagnosticsBuildInfo.g.cs" Visible="false" />
+    </ItemGroup>
+  </Target>
+</Project>

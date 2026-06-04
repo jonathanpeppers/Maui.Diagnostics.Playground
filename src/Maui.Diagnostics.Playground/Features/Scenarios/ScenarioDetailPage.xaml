@@ -1,0 +1,113 @@
+<ContentPage
+    x:Class="Maui.Diagnostics.Playground.Features.Scenarios.ScenarioDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
+    Shell.TabBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,28,24,36" Spacing="20">
+            <Button
+                Text="Back to gallery"
+                HorizontalOptions="Start"
+                Command="{Binding BackCommand}" />
+
+            <Border
+                Padding="22"
+                BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#1E293B}"
+                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                StrokeShape="RoundRectangle 24">
+                <VerticalStackLayout Spacing="14">
+                    <Label
+                        Text="{Binding Scenario.Title}"
+                        FontAttributes="Bold"
+                        FontSize="30"
+                        TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                        SemanticProperties.HeadingLevel="Level1" />
+                    <Label
+                        Text="{Binding Scenario.Description}"
+                        FontSize="16"
+                        LineBreakMode="WordWrap"
+                        TextColor="{AppThemeBinding Light=#475569, Dark=#CBD5E1}" />
+                    <FlexLayout Direction="Row" Wrap="Wrap">
+                        <Border
+                            Margin="0,6,8,0"
+                            Padding="10,6"
+                            BackgroundColor="#FEF3C7"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 14">
+                            <Label
+                                Text="{Binding Scenario.CategoryLabel}"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                TextColor="#92400E" />
+                        </Border>
+                        <Border
+                            Margin="0,6,8,0"
+                            Padding="10,6"
+                            BackgroundColor="#DBEAFE"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 14">
+                            <Label
+                                Text="{Binding Scenario.PlatformLabel}"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                TextColor="#1D4ED8" />
+                        </Border>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label
+                Text="Expected artifacts"
+                FontAttributes="Bold"
+                FontSize="22"
+                TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}" />
+
+            <CollectionView
+                ItemsSource="{Binding Scenario.ExpectedArtifacts}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,0,0,10"
+                            Padding="14"
+                            BackgroundColor="{AppThemeBinding Light=#ECFDF5, Dark=#052E2B}"
+                            Stroke="{AppThemeBinding Light=#A7F3D0, Dark=#115E59}"
+                            StrokeShape="RoundRectangle 16">
+                            <Label
+                                Text="{Binding .}"
+                                FontSize="14"
+                                TextColor="{AppThemeBinding Light=#065F46, Dark=#A7F3D0}" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Border
+                Padding="18"
+                BackgroundColor="{Binding ActionBackgroundColor}"
+                Stroke="{Binding ActionStrokeColor}"
+                StrokeShape="RoundRectangle 18">
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        Text="{Binding ActionTitle}"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        TextColor="{Binding ActionTextColor}" />
+                    <Label
+                        Text="{Binding ActionDescription}"
+                        FontSize="14"
+                        LineBreakMode="WordWrap"
+                        TextColor="{Binding ActionTextColor}" />
+                    <Button
+                        Text="{Binding ActionButtonText}"
+                        Command="{Binding RunScenarioCommand}"
+                        IsEnabled="{Binding CanRunScenario}"
+                        BackgroundColor="#DC2626"
+                        TextColor="White" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

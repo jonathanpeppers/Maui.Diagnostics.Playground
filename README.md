@@ -1,2 +1,43 @@
 # Maui.Diagnostics.Playground
-For testing different types of crashes, diagnostics collections, improvements, etc.
+
+A .NET MAUI diagnostics playground for exercising crash scenarios on the .NET 11 mobile runtimes.
+
+The app is intentionally a polished sample gallery: scenarios are registered in one catalog, shown on the landing page, and opened through Shell navigation. Each scenario documents the platform support and the diagnostic artifacts it is expected to produce.
+
+## Prerequisites
+
+- .NET SDK `11.0.100-preview.4.26230.115`
+- .NET MAUI workloads from the matching .NET 11 preview band
+
+```bash
+dotnet workload restore
+```
+
+## Build
+
+```bash
+dotnet build src/Maui.Diagnostics.Playground/Maui.Diagnostics.Playground.csproj -f net11.0-android
+dotnet build src/Maui.Diagnostics.Playground/Maui.Diagnostics.Playground.csproj -f net11.0-ios -r iossimulator-arm64
+dotnet build src/Maui.Diagnostics.Playground/Maui.Diagnostics.Playground.csproj -f net11.0-maccatalyst
+```
+
+## Runtime and vendor switches
+
+The repo defaults to CoreCLR-oriented testing:
+
+```bash
+dotnet build src/Maui.Diagnostics.Playground/Maui.Diagnostics.Playground.csproj \
+  -f net11.0-android \
+  -p:MauiDiagnosticsUseCoreClr=true \
+  -p:CrashVendor=None
+```
+
+Important MSBuild properties:
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `MauiDiagnosticsUseCoreClr` | `true` | Requests the CoreCLR mobile runtime path. Set to `false` for Mono comparison runs. |
+| `CrashVendor` | `None` | Selects the active crash-reporting vendor integration. Initial values are `None`, `Sentry`, `Raygun`, `NewRelic`, `Bugsee`, `Firebase`, `AppCenterLegacy`, and `NativePrototype`. |
+| `CrashReportFrameLimitPerThread` | `32` | Captures the intended compact crash report frame cap for self-reporting and future runtime configuration. |
+
+The landing page includes a runtime self-report so each run shows the requested runtime, detected runtime family, target framework, build configuration, and active vendor.
