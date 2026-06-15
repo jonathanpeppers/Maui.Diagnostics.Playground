@@ -20,7 +20,7 @@ public sealed class DiagnosticsSelfReportService : IDiagnosticsSelfReportService
         var targetFramework = assembly.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName
             ?? AppContext.TargetFrameworkName
             ?? "Unknown";
-        var runtimeFamily = Type.GetType("Mono.Runtime") is null ? "CoreCLR" : "Mono";
+        var runtimeFamily = Type.GetType("Mono.RuntimeStructs") is null ? "CoreCLR" : "Mono";
         var targetRuntime = IsEnabled(useCoreClr) ? "CoreCLR requested" : "Mono requested";
         var platform = DeviceInfo.Current.Platform.ToString();
         var chips = new[]
